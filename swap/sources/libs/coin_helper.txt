@@ -1,0 +1,6 @@
+module addrx::coin_helper {
+    use aptos_framework::coin;
+    use aptos_std::comparator::{Self, Result};
+
+    
+}

@@ -1,0 +1,33 @@
+module meow::demo {
+    const ENOT_ENOUGH: u64 = 0;
+
+    const Pool1_meow: u64 = 312;
+    const Pool1_usdt: u64 = 3201;
+
+    // Applies 5% fee for each swap tx.
+    fun calculate_swap(coin1: u64, coin2: u64, coin1_amt: u64): u64 {
+        assert!(coin1_amt > 0, ENOT_ENOUGH);
+        let fee = coin1_amt * 5 / 1000;
+        let mix_supply = coin1 * coin2;
+        let new_usdt = coin1 + coin1_amt;
+        let new_meow = mix_supply / (new_usdt - fee);
+        let receive = coin2 - new_meow;
+        return receive
+    }
+    fun token_price(coin1: u64, coin2: u64){
+        return coin1/coin2
+    }
+
+    #[test_only]
+    use std::debug::print;
+
+    #[test]
+    fun test_function(){
+        let swap_amount = 495;
+        let result = calculate_swap(Pool1_usdt, Pool1_meow, swap_amount);
+        let result2 = calculate_swap(Pool1_usdt + swap_amount, Pool1_meow - result, swap_amount);
+        print(&result);
+        print(&result2)
+    }
+
+}
